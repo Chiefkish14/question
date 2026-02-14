@@ -1,0 +1,20 @@
+name: Build Mac App
+on:
+workflow_dispatch:
+
+jobs:
+build:
+runs-on: macos-latest
+steps:
+- uses: actions/checkout@v4
+- uses: actions/setup-python@v5
+with:
+python-version: "3.11"
+- run: python -m pip install --upgrade pip
+- run: pip install pyinstaller
+- run: pyinstaller --windowed --name question game.py
+- run: ditto -c -k --sequesterRsrc --keepParent dist/question.app question-mac.zip
+- uses: actions/upload-artifact@v4
+with:
+name: question-mac
+path: question-mac.zip
